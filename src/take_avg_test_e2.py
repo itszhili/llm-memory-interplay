@@ -41,17 +41,17 @@ def segment_tokens(flow):
         "last_subject_token": ie_dim[obj_end + 8:obj_end + 9, :],
         # "rest_of_context_tokens": ie_dim[obj_end + 9:-2, :],
         # "question": ie_dim[-2:-1, :],
-        "rest_of_context_tokens": ie_dim[obj_end + 9:obj_end + 9 + 1, :],  # subject 结束后两个 token
+        "rest_of_context_tokens": ie_dim[obj_end + 9:obj_end + 9 + 1, :],  # One token immediately after the subject span ends
         "question": ie_dim[obj_end + 9 + 1:-1, :],
         "last_token": ie_dim[-1:, :],
     }
 
-    # 统一每个分段的维度
+    # Average each segment along the token axis to produce a uniform-length vector per segment
     segment_avg = {key: np.mean(value, axis=0) if value.size > 0 else np.zeros(ie_dim.shape[1]) for key, value in segments.items()}
     return segment_avg
 
 
-# 旧图实验1成功
+# Legacy Experiment 1 segmentation — kept for reference (produced correct plots)
 # def segment_tokens(flow, experiment_type="b"):
 #     tokens = flow.input_tokens
 #     ie_dim = flow.ie.cpu().numpy() 

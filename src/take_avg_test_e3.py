@@ -73,17 +73,17 @@ def segment_tokens(flow):
     # }
 
     segments = {
-    "beginning_of_context": ie_dim[:obj_start, :],  # object 前的上下文
-    "first_object_token": ie_dim[obj_start:obj_start + 1, :],  # object 的第一个 token
+    "beginning_of_context": ie_dim[:obj_start, :],  # Context tokens before the object span
+    "first_object_token": ie_dim[obj_start:obj_start + 1, :],  # First token of the object span
     "middle_object_tokens": ie_dim[obj_start + 1:obj_end - 1, :] if obj_end - obj_start > 1 else np.zeros((0, ie_dim.shape[1])),
     "last_object_token": ie_dim[obj_end - 1:obj_end, :] if obj_end - obj_start > 1 else np.zeros((0, ie_dim.shape[1])),
-    "context_in_between_tokens": ie_dim[obj_end:subject_start, :],  # object 和 subject 之间的上下文
-    "first_subject_token": ie_dim[subject_start:subject_start + 1, :],  # subject 的第一个 token
+    "context_in_between_tokens": ie_dim[obj_end:subject_start, :],  # Context tokens between the object and subject spans
+    "first_subject_token": ie_dim[subject_start:subject_start + 1, :],  # First token of the subject span
     "middle_subject_token": ie_dim[subject_start + 1:subject_end - 1, :] if subject_end - subject_start > 1 else np.zeros((0, ie_dim.shape[1])),
     "last_subject_token": ie_dim[subject_end - 1:subject_end, :] if subject_end - subject_start > 1 else np.zeros((0, ie_dim.shape[1])),
-    "rest_of_context_tokens": ie_dim[subject_end:subject_end + 1, :],  # subject 结束后两个 token
+    "rest_of_context_tokens": ie_dim[subject_end:subject_end + 1, :],  # One token immediately after the subject span ends
     "question": ie_dim[subject_end + 1:-1, :],
-    "last_token": ie_dim[-1:, :],  # 最后一个 token
+    "last_token": ie_dim[-1:, :],  # Last token of the sequence (answer position)
 }
 
     segment_avg = {
